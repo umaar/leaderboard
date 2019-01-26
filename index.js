@@ -4,6 +4,7 @@ var humanFormat = require('human-format');
 var csv = require('fast-csv');
 var dataFile = './sample-data.csv';
 let insertedRecordCounter = 0;
+var server = require('./lib/server');
 
 var extractResult = (dataPoint) => {
     /*
@@ -18,6 +19,7 @@ var extractResult = (dataPoint) => {
 	];
 };
 
+server(db.getDBInstance());
 
 var handleRecord = (record) => db.insertEntry(extractResult(record));
 
