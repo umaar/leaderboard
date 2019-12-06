@@ -1,7 +1,7 @@
 const fs = require('fs');
 const humanFormat = require('human-format');
 const csv = require('fast-csv');
-const db = require('./lib/db');
+const db = require('./lib/database');
 
 const dataFile = './sample-data.csv';
 let insertedRecordCounter = 0;
@@ -9,40 +9,53 @@ const server = require('./lib/server');
 
 const extractResult = dataPoint => {
 	/*
-        Explanation of the milliseconds / 10
-        We are grouping milliseconds into buckets, e.g.
-        For item 12345, there are 4 records of the bucket representing 1000 / 10 milliseconds
-        If we didn't divide by 10, our buckets would be too granular
-    */
+		Explanation of the milliseconds / 10
+		We are grouping milliseconds into buckets, e.g.
+		For item 12345, there are 4 records of the bucket representing 1000 / 10 milliseconds
+		If we didn't divide by 10, our buckets would be too granular
+	*/
 	return [
-		parseInt(parseInt(dataPoint.milliseconds) / 10),
-		parseInt(dataPoint.itemId)
+		parseInt(parseInt(dataPoint.milliseconds, 10) / 10, 10),
+		parseInt(dataPoint.itemId, 10)
 	];
 };
 
-server(db.getDBInstance());
+const insertRecord = record => db.insertEntry(extractResult(record));
 
-const handleRecord = record => db.insertEntry(extractResult(record));
-
-function start() {
-	console.log('starting');
-	fs.createReadStream(dataFile)
-		.pipe(csv({headers: true}))
-		.on('data', record => {
-    	handleRecord(record).then(() => {
-    		insertedRecordCounter++;
-    	});
-		})
-		.on('end', () => console.log('\nDone inserting all records'));
+async function processRecords() {
+	return new Promise(resolve => {
+		fs.createReadStream(dataFile)
+			.pipe(csv.parse({headers: true}))
+			.on('data', record => {
+				insertRecord(record).then(() => {
+					insertedRecordCounter++;
+				});
+			})
+			.on('end', resolve);
+	});
 }
 
-const shouldResetDatabase = true;
+async function resetDatabase() {
+	console.log('Flushing DB');
+	await db.flushdb();
+	console.log('Processing Records');
+	const interval = setInterval(() => {
+		const formattedCounter = humanFormat(insertedRecordCounter);
+		console.log('Total Records Inserted:', formattedCounter);
+	}, 10);
 
-if (shouldResetDatabase) {
-	console.log('flushing');
-	db.flushdb().then(start);
-	// SetInterval(() => {
-	// 	console.log('\nTotal Records Inserted: ', humanFormat(insertedRecordCounter));
-	// }, 100);
+	await processRecords();
+	clearInterval(interval);
 }
 
+async function init() {
+	const shouldResetDatabase = true;
+
+	if (shouldResetDatabase) {
+		await resetDatabase();
+	}
+
+	server(db.getDBInstance());
+}
+
+init();
