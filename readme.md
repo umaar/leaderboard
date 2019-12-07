@@ -1,24 +1,48 @@
 
-##  Leaderboard
+### Leaderboard
+
+[![Actions Status](https://github.com/umaar/leaderboard/workflows/Node%20CI/badge.svg)](https://github.com/umaar/leaderboard/actions)
 
 Supports large datasets of hundreds of millions of rows.
 
 ### Expected data format
 
-A CSV file which looks like this. Name it `data.csv`
+This web server lets you create a fast and responsive leaderboard even with hundreds of millions of 'scores'. Say you have a `data.csv` file which looks like this:
 
 | itemId  | milliseconds |
 | ------------- | ------------- |
-| 497823  | 2277 |
-| 893752  | 5359 |
+| 00001  | 2100 |
+| 00001  | 3042 |
+| 00001  | 2277 |
+| 00002  | 544 |
+| 00002  | 2992 |
+| 00003  | 1500 |
+| 00004  | 4010 |
 
-### Start redis
+Milliseconds can represent any metric you're interested in, e.g. the time it took to click a button, the length of time a user stayed on your page. Or it can be something else entirely, e.g. view counts for a given blog post.
+
+#### To get started
+
+##### Start redis
 
 ```sh
 ~/Downloads/redis-download/redis-stable/src/redis-server
 
 # Optional - test server is alive
 ~/Downloads/redis-download/redis-stable/src/redis-cli ping
+```
+
+##### Start the web server
+
+```sh
+npm i
+npm start
+
+# test it with:
+
+curl --data 'time=8800&itemId=Your_Item_ID_Here' 0.0.0.0:3000/itemTime
+
+# You can also get all times for an item at: http://localhost:3000/allItemTimes/Your_Item_ID_Here
 ```
 
 ### Using the redis CLI
@@ -32,53 +56,4 @@ HGET 76223190 total
 
 # See all data stored for a particular item
 HGETALL 76223190
-```
-
-http://localhost:3000/allItemTimes/76223190
-
-```json
-{
-    "timings": [
-        {
-            "time": "1s",
-            "rawTime": 100,
-            "count": 2
-        },
-        {
-            "time": "1.12s",
-            "rawTime": 112
-        },
-        {
-            "time": "1.79s",
-            "rawTime": 179
-        },
-        {
-            "time": "2s",
-            "rawTime": 200,
-            "count": 1
-        },
-        {
-            "time": "2.4s",
-            "rawTime": 240,
-            "count": 2
-        },
-        {
-            "time": "2.5s",
-            "rawTime": 250
-        },
-        {
-            "time": "2.7s",
-            "rawTime": 270,
-            "count": 1
-        },
-        {
-            "time": "2.97s",
-            "rawTime": 297
-        },
-        {
-            "time": "6.79s",
-            "rawTime": 679
-        }
-    ]
-}
 ```

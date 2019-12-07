@@ -1,20 +1,26 @@
 {
   "name": "leaderboard",
   "private": true,
-  "version": "1.0.0",
-  "description": "",
+  "description": "Leaderboard app powered by Redis",
   "main": "index.js",
+  "type": "module",
   "dependencies": {
-    "human-format": "^0.5.0",
-    "xo": "^0.24.0"
+    "human-format": "^0.10.1",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "fast-csv": "^3.4.0",
+    "ioredis": "^4.14.1"
   },
   "devDependencies": {
-    "body-parser": "^1.13.2",
-    "express": "^4.13.1",
-    "fast-csv": "^0.6.0",
-    "ioredis": "^1.7.0"
+    "xo": "^0.25.3",
+    "@umaar/personal-eslint-config": "latest"
   },
   "scripts": {
-    "test": "curl --data 'time=8800&itemId=110637645' 0.0.0.0:3000/itemTime"
+    "test": "xo",
+    "ping": "curl --data 'time=8800&itemId=110637645' 0.0.0.0:3000/itemTime",
+    "start": "node index.js"
+  },
+  "xo": {
+    "extends": "./node_modules/@umaar/personal-eslint-config/rules.json"
   }
 }

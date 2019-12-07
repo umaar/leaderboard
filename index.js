@@ -1,11 +1,11 @@
-const fs = require('fs');
-const humanFormat = require('human-format');
-const csv = require('fast-csv');
-const db = require('./lib/database');
+import fs from 'fs';
+import humanFormat from 'human-format';
+import csv from 'fast-csv';
+import db from './lib/database.js';
+import server from './lib/server.js';
 
-const dataFile = './sample-data.csv';
+const dataFile = './sample-data.csv'; // Or './data.csv'
 let insertedRecordCounter = 0;
-const server = require('./lib/server');
 
 const extractResult = dataPoint => {
 	/*
@@ -42,7 +42,7 @@ async function resetDatabase() {
 	const interval = setInterval(() => {
 		const formattedCounter = humanFormat(insertedRecordCounter);
 		console.log('Total Records Inserted:', formattedCounter);
-	}, 10);
+	}, 1000);
 
 	await processRecords();
 	clearInterval(interval);
