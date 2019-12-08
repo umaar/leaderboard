@@ -35,21 +35,24 @@ async function processRecords() {
 	});
 }
 
+function logInsertedRecords() {
+	const formattedCounter = humanFormat(insertedRecordCounter);
+	console.log('Total Records Inserted:', formattedCounter);
+}
+
 async function resetDatabase() {
 	console.log('Flushing DB');
 	await db.flushdb();
 	console.log('Processing Records');
-	const interval = setInterval(() => {
-		const formattedCounter = humanFormat(insertedRecordCounter);
-		console.log('Total Records Inserted:', formattedCounter);
-	}, 1000);
+	const interval = setInterval(logInsertedRecords, 1000);
 
 	await processRecords();
 	clearInterval(interval);
+	logInsertedRecords();
 }
 
 async function init() {
-	const shouldResetDatabase = true;
+	const shouldResetDatabase = false;
 
 	if (shouldResetDatabase) {
 		await resetDatabase();
