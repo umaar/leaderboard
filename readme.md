@@ -63,7 +63,7 @@ Once this tool ingests your data, you can then perform queries on `itemId`'s, (`
 
 ```sh
 npm i
-npm start
+make start
 
 # You can insert data with this. 
 

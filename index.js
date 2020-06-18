@@ -1,7 +1,7 @@
 import fs from 'fs';
 import humanFormat from 'human-format';
 import csv from 'fast-csv';
-import db from './lib/database.js';
+import database from './lib/database.js';
 import server from './lib/server.js';
 
 const dataFile = './sample-data.csv'; // Or './data.csv'
@@ -15,12 +15,12 @@ const extractResult = dataPoint => {
 		If we didn't divide by 10, our buckets would be too granular
 	*/
 	return [
-		parseInt(parseInt(dataPoint.milliseconds, 10) / 10, 10),
-		parseInt(dataPoint.itemId, 10)
+		Number.parseInt(Number.parseInt(dataPoint.milliseconds, 10) / 10, 10),
+		Number.parseInt(dataPoint.itemId, 10)
 	];
 };
 
-const insertRecord = record => db.insertEntry(extractResult(record));
+const insertRecord = record => database.insertEntry(extractResult(record));
 
 async function processRecords() {
 	return new Promise(resolve => {
@@ -42,7 +42,7 @@ function logInsertedRecords() {
 
 async function resetDatabase() {
 	console.log('Flushing DB');
-	await db.flushdb();
+	await database.flushdb();
 	console.log('Processing Records');
 	const interval = setInterval(logInsertedRecords, 1000);
 
@@ -58,7 +58,7 @@ async function init() {
 		await resetDatabase();
 	}
 
-	server(db.getDBInstance());
+	server(database.getDBInstance());
 }
 
 init();
