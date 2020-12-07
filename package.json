@@ -5,14 +5,14 @@
   "main": "index.js",
   "type": "module",
   "dependencies": {
-    "human-format": "^0.10.1",
+    "human-format": "^0.11.0",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
-    "fast-csv": "^4.1.3",
-    "ioredis": "^4.16.3"
+    "fast-csv": "^4.3.1",
+    "ioredis": "^4.17.3"
   },
   "devDependencies": {
-    "xo": "^0.29.1",
+    "xo": "^0.32.1",
     "@umaar/personal-eslint-config": "latest"
   },
   "xo": {
