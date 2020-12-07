@@ -5,15 +5,15 @@
   "main": "index.js",
   "type": "module",
   "dependencies": {
-    "human-format": "^0.11.0",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
-    "fast-csv": "^4.3.1",
-    "ioredis": "^4.17.3"
+    "fast-csv": "^4.3.6",
+    "human-format": "^0.11.0",
+    "ioredis": "^4.19.2"
   },
   "devDependencies": {
-    "xo": "^0.32.1",
-    "@umaar/personal-eslint-config": "latest"
+    "@umaar/personal-eslint-config": "^1.0.3",
+    "xo": "^0.35.0"
   },
   "xo": {
     "extends": "./node_modules/@umaar/personal-eslint-config/rules.json"
