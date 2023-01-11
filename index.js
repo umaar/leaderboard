@@ -1,13 +1,14 @@
-import fs from 'fs';
-import humanFormat from 'human-format';
-import csv from 'fast-csv';
-import database from './lib/database.js';
-import server from './lib/server.js';
+import fs from "fs";
+import humanFormat from "human-format";
+import csv from "fast-csv";
+import database from "./lib/database.js";
+import server from "./lib/server.js";
 
-const dataFile = './sample-data.csv'; // Or './data.csv'
+// const dataFile = "./sample-data.csv"; // Or './data.csv'
+const dataFile = "./data.csv"; //
 let insertedRecordCounter = 0;
 
-const extractResult = dataPoint => {
+const extractResult = (dataPoint) => {
 	/*
 		Explanation of the milliseconds / 10
 		We are grouping milliseconds into buckets, e.g.
@@ -16,34 +17,34 @@ const extractResult = dataPoint => {
 	*/
 	return [
 		Number.parseInt(Number.parseInt(dataPoint.milliseconds, 10) / 10, 10),
-		Number.parseInt(dataPoint.itemId, 10)
+		Number.parseInt(dataPoint.itemId, 10),
 	];
 };
 
-const insertRecord = record => database.insertEntry(extractResult(record));
+const insertRecord = (record) => database.insertEntry(extractResult(record));
 
 async function processRecords() {
-	return new Promise(resolve => {
+	return new Promise((resolve) => {
 		fs.createReadStream(dataFile)
-			.pipe(csv.parse({headers: true}))
-			.on('data', record => {
+			.pipe(csv.parse({ headers: true }))
+			.on("data", (record) => {
 				insertRecord(record).then(() => {
 					insertedRecordCounter++;
 				});
 			})
-			.on('end', resolve);
+			.on("end", resolve);
 	});
 }
 
 function logInsertedRecords() {
 	const formattedCounter = humanFormat(insertedRecordCounter);
-	console.log('Total Records Inserted:', formattedCounter);
+	console.log("Total Records Inserted:", formattedCounter);
 }
 
 async function resetDatabase() {
-	console.log('Flushing DB');
+	console.log("Flushing DB");
 	await database.flushdb();
-	console.log('Processing Records');
+	console.log("Processing Records");
 	const interval = setInterval(logInsertedRecords, 1000);
 
 	await processRecords();

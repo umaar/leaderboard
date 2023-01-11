@@ -1,4 +1,3 @@
-
 ## Leaderboard
 
 [![Actions Status](https://github.com/umaar/leaderboard/workflows/Node%20CI/badge.svg)](https://github.com/umaar/leaderboard/actions)
@@ -11,31 +10,31 @@ This tool supports leaderboard functionality, where you may have hundreds of mil
 
 You have a popular game where players complete levels. This Node.js application can store the time it took players to complete such levels, and then respond with a leaderboard for a particular level, and also the relative ranking for a particular score. This allows you to show messages like:
 
->You completed this level in 45sec. You are position 3 in the leaderboard (out of 244k)!
+> You completed this level in 45sec. You are position 3 in the leaderboard (out of 244k)!
 
 Or:
 
->You scored better than 85% of users.
+> You scored better than 85% of users.
 
 ### What can you do exactly?
 
-* Ingest a large dataset of scores/metrics upon app startup
-* Insert metrics over HTTP, while the web server is up and running
-* Retrieve all metrics for a given item, in grouped/bucketed form (useful for large datasets)
-* Given a particular item, retrieve it's position in a leaderboard, relative to all other scores
-* Retrieve results in < 1 second, even with hundreds of millions of entries, thanks to Redis
+-   Ingest a large dataset of scores/metrics upon app startup
+-   Insert metrics over HTTP, while the web server is up and running
+-   Retrieve all metrics for a given item, in grouped/bucketed form (useful for large datasets)
+-   Given a particular item, retrieve its position in a leaderboard, relative to all other scores
+-   Retrieve results in < 1 second, even with hundreds of millions of entries, thanks to Redis
 
 This web server lets you create a fast and responsive leaderboard even with hundreds of millions of 'scores'. Say you have a `data.csv` file which looks like this:
 
-| itemId  | milliseconds |
-| ------------- | ------------- |
-| 00001  | 2100 |
-| 00001  | 3042 |
-| 00001  | 2277 |
-| 00002  | 544 |
-| 00002  | 2992 |
-| 00003  | 1500 |
-| 00004  | 4010 |
+| itemId | milliseconds |
+| ------ | ------------ |
+| 00001  | 2100         |
+| 00001  | 3042         |
+| 00001  | 2277         |
+| 00002  | 544          |
+| 00002  | 2992         |
+| 00003  | 1500         |
+| 00004  | 4010         |
 
 Milliseconds can represent any metric you're interested in, e.g. the time it took to click a button, the length of time a user stayed on your page.
 
@@ -43,8 +42,8 @@ Once this tool ingests your data, you can then perform queries on `itemId`'s, (`
 
 ```json
 {
-    "position":2,
-    "total":3
+    "position": 2,
+    "total": 3
 }
 ```
 
@@ -52,11 +51,17 @@ Once this tool ingests your data, you can then perform queries on `itemId`'s, (`
 
 #### Start redis
 
-```sh
-~/Downloads/redis-download/redis-stable/src/redis-server
+Install redis:
 
-# Optional - test server is alive
-~/Downloads/redis-download/redis-stable/src/redis-cli ping
+```sh
+brew install redis
+```
+
+```sh
+redis-server
+
+# Optional - test server is alive, in a new terminal
+redis-cli ping
 ```
 
 #### Start the web server
@@ -65,7 +70,7 @@ Once this tool ingests your data, you can then perform queries on `itemId`'s, (`
 npm i
 make start
 
-# You can insert data with this. 
+# You can insert data with this.
 
 curl --data 'time=8800&itemId=Your_Item_ID_Here' 0.0.0.0:3000/itemTime
 
