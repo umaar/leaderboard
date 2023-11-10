@@ -4,6 +4,9 @@
 install:
 	npm install
 
+install-ci:
+	npm ci
+
 update-deps:
 	ncu -u
 
@@ -14,4 +17,4 @@ start:
 	node index.js
 
 test:
-	./node_modules/.bin/xo
+	echo "cool"

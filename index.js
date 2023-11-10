@@ -4,8 +4,8 @@ import csv from "fast-csv";
 import database from "./lib/database.js";
 import server from "./lib/server.js";
 
-// const dataFile = "./sample-data.csv"; // Or './data.csv'
-const dataFile = "./data.csv"; //
+const dataFile = "./sample-data.csv"; // Or './data.csv'
+// const dataFile = "./data.csv"; //
 let insertedRecordCounter = 0;
 
 const extractResult = (dataPoint) => {
